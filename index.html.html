@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz 2 Study Guide — Calculus</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #e8c547;
+    --accent2: #7c6af7;
+    --accent3: #4fc3a1;
+    --accent4: #f07070;
+    --text: #e8e8f0;
+    --muted: #888899;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0a0a0f 0%, #13131a 50%, #1a1230 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(124,106,247,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .quiz-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav::-webkit-scrollbar { height: 3px; }
+  nav::-webkit-scrollbar-thumb { background: var(--border); }
+  .nav-btn {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    padding: 8px 18px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover { border-color: var(--accent2); color: var(--text); }
+  .nav-btn.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+
+  /* MAIN */
+  main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* TOPIC HEADER */
+  .topic-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .topic-icon {
+    width: 48px; height: 48px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .topic-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .section-ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    display: block;
+    width: 3px; height: 14px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .formula-box {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    padding: 18px 20px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    font-size: 16px;
+    overflow-x: auto;
+  }
+  .note-box {
+    background: rgba(76,195,161,0.07);
+    border: 1px solid rgba(76,195,161,0.25);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--accent3);
+  }
+  .warning-box {
+    background: rgba(240,112,112,0.07);
+    border: 1px solid rgba(240,112,112,0.25);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--accent4);
+  }
+
+  p { margin-bottom: 10px; font-size: 15px; }
+  ul, ol { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 6px; font-size: 15px; }
+
+  /* STEP BOXES */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+  }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    background: var(--accent2);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* QUIZ SECTION */
+  .quiz-container { }
+  .quiz-question {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .quiz-question.correct { border-color: var(--accent3); }
+  .quiz-question.wrong { border-color: var(--accent4); }
+  .q-text { font-size: 15px; margin-bottom: 16px; font-weight: 400; }
+  .options { display: grid; gap: 8px; }
+  .option-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent2); background: rgba(124,106,247,0.08); }
+  .option-btn.correct { background: rgba(76,195,161,0.12); border-color: var(--accent3); color: var(--accent3); }
+  .option-btn.wrong { background: rgba(240,112,112,0.10); border-color: var(--accent4); color: var(--accent4); }
+  .option-btn:disabled { cursor: default; }
+  .option-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+  .explanation { margin-top: 14px; padding: 12px 16px; background: var(--surface); border-radius: 6px; font-size: 14px; color: var(--muted); display: none; }
+  .explanation.show { display: block; }
+  .quiz-score {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .score-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--muted); }
+  .score-val { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--accent); }
+  .reset-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* COLOR ACCENTS PER TOPIC */
+  .t1 .card-title::before { background: var(--accent); }
+  .t2 .card-title::before { background: var(--accent2); }
+  .t3 .card-title::before { background: var(--accent3); }
+  .t4 .card-title::before { background: var(--accent4); }
+  .t1 .topic-icon { background: rgba(232,197,71,0.12); }
+  .t2 .topic-icon { background: rgba(124,106,247,0.12); }
+  .t3 .topic-icon { background: rgba(76,195,161,0.12); }
+  .t4 .topic-icon { background: rgba(240,112,112,0.12); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th { background: var(--surface); padding: 10px 14px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1px; color: var(--muted); border-bottom: 1px solid var(--border); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+
+  @media (max-width: 600px) {
+    .topic-header { flex-direction: column; align-items: flex-start; }
+    .quiz-score { flex-direction: column; gap: 12px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="quiz-badge">QUIZ 2 · MARCH 1</div>
+  <h1>Calculus Study Guide</h1>
+  <p class="subtitle">4 Topics · Interactive Notes + Practice Questions</p>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="showSection('trig')">7.3 Trig Integration</button>
+  <button class="nav-btn" onclick="showSection('riemann')">5.4 Riemann Sum</button>
+  <button class="nav-btn" onclick="showSection('improper')">7.8 Improper Integrals</button>
+  <button class="nav-btn" onclick="showSection('rational')">7.5 Rational Functions</button>
+  <button class="nav-btn" onclick="showSection('quiz')">🎯 Practice Quiz</button>
+</nav>
+
+<main>
+
+<!-- ======== SECTION 1: TRIG ======== -->
+<div class="section t1 active" id="trig">
+  <div class="topic-header">
+    <div class="topic-icon">∫</div>
+    <div>
+      <h2>Trig Integration & Reduction Formulas</h2>
+      <div class="section-ref">§7.3 · Integration of Trigonometric Functions</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What is a Reduction Formula?</div>
+    <p>A <strong>reduction formula</strong> expresses \(\int \sin^n x\,dx\) (or \(\cos^n x\)) in terms of a simpler integral with a lower power. You apply it <em>repeatedly</em> until you reach a base case.</p>
+    <div class="formula-box">
+      \[\int \sin^n x\,dx = -\frac{\sin^{n-1}x\cos x}{n} + \frac{n-1}{n}\int \sin^{n-2}x\,dx\]
+    </div>
+    <div class="formula-box">
+      \[\int \cos^n x\,dx = \frac{\cos^{n-1}x\sin x}{n} + \frac{n-1}{n}\int \cos^{n-2}x\,dx\]
+    </div>
+    <div class="note-box">💡 Both formulas have the same structure. Each application reduces the power by 2, so you keep going until you reach \(n=1\) or \(n=0\).</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Base Cases to Memorize</div>
+    <table>
+      <tr><th>Integral</th><th>Result</th></tr>
+      <tr><td>\(\int \sin x\,dx\)</td><td>\(-\cos x + C\)</td></tr>
+      <tr><td>\(\int \cos x\,dx\)</td><td>\(\sin x + C\)</td></tr>
+      <tr><td>\(\int \sin^0 x\,dx = \int 1\,dx\)</td><td>\(x + C\)</td></tr>
+      <tr><td>\(\int \cos^0 x\,dx\)</td><td>\(x + C\)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Worked Example — \(\int \sin^4 x\,dx\)</div>
+    <ol class="steps">
+      <li>Apply the reduction formula with \(n=4\):
+        <div class="formula-box" style="margin-top:8px">\[\int \sin^4 x\,dx = -\frac{\sin^3 x\cos x}{4} + \frac{3}{4}\int \sin^2 x\,dx\]</div>
+      </li>
+      <li>Apply again with \(n=2\):
+        <div class="formula-box" style="margin-top:8px">\[\int \sin^2 x\,dx = -\frac{\sin x\cos x}{2} + \frac{1}{2}\int 1\,dx = -\frac{\sin x\cos x}{2} + \frac{x}{2}\]</div>
+      </li>
+      <li>Substitute back:
+        <div class="formula-box" style="margin-top:8px">\[\int \sin^4 x\,dx = -\frac{\sin^3 x\cos x}{4} + \frac{3}{4}\!\left(-\frac{\sin x\cos x}{2}+\frac{x}{2}\right) + C\]</div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Key Trig Identities You'll Need</div>
+    <table>
+      <tr><th>Identity</th><th>Use</th></tr>
+      <tr><td>\(\sin^2 x = \frac{1-\cos 2x}{2}\)</td><td>Even powers of sin</td></tr>
+      <tr><td>\(\cos^2 x = \frac{1+\cos 2x}{2}\)</td><td>Even powers of cos</td></tr>
+      <tr><td>\(\sin^2 x + \cos^2 x = 1\)</td><td>Odd powers — save one factor</td></tr>
+      <tr><td>\(\tan^2 x = \sec^2 x - 1\)</td><td>Powers of tan</td></tr>
+    </table>
+    <div class="note-box">💡 For <strong>odd powers</strong> (like \(\sin^5 x\)), factor out one \(\sin x\), convert the rest using \(\sin^2 x = 1-\cos^2 x\), then use substitution \(u=\cos x\).</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Strategy Summary</div>
+    <ul>
+      <li><strong>Even power of sin or cos alone:</strong> Use reduction formula or half-angle identities</li>
+      <li><strong>Odd power:</strong> Save one trig factor, convert rest, u-substitution</li>
+      <li><strong>Mixed \(\sin^m x \cos^n x\):</strong> If one is odd, use substitution</li>
+      <li><strong>tan/sec combos:</strong> Use \(\tan^2 x = \sec^2 x - 1\) and save sec²x for du</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== SECTION 2: RIEMANN ======== -->
+<div class="section t2" id="riemann">
+  <div class="topic-header">
+    <div class="topic-icon">Σ</div>
+    <div>
+      <h2>Riemann Sums</h2>
+      <div class="section-ref">§5.4 · Approximating Definite Integrals</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Core Idea</div>
+    <p>A Riemann sum approximates \(\int_a^b f(x)\,dx\) by dividing \([a,b]\) into \(n\) subintervals of equal width and summing rectangle areas.</p>
+    <div class="formula-box">
+      \[\Delta x = \frac{b-a}{n}, \qquad \int_a^b f(x)\,dx \approx \sum_{i=1}^{n} f(x_i^*)\,\Delta x\]
+    </div>
+    <p>where \(x_i^*\) is a sample point in the \(i\)-th subinterval.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Three Types of Sample Points</div>
+    <table>
+      <tr><th>Type</th><th>Sample point \(x_i^*\)</th><th>Formula</th></tr>
+      <tr><td><strong>Left</strong> Riemann Sum</td><td>Left endpoint</td><td>\(x_i^* = a + (i-1)\Delta x\)</td></tr>
+      <tr><td><strong>Right</strong> Riemann Sum</td><td>Right endpoint</td><td>\(x_i^* = a + i\,\Delta x\)</td></tr>
+      <tr><td><strong>Midpoint</strong> Rule</td><td>Midpoint</td><td>\(x_i^* = a + \left(i-\tfrac{1}{2}\right)\Delta x\)</td></tr>
+    </table>
+    <div class="note-box">💡 The midpoint rule is generally the most accurate of the three.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Worked Example</div>
+    <p>Approximate \(\int_1^3 x^2\,dx\) using a <strong>Right Riemann Sum</strong> with \(n=4\).</p>
+    <ol class="steps">
+      <li>\(\Delta x = \frac{3-1}{4} = 0.5\)</li>
+      <li>Right endpoints: \(x_1=1.5,\ x_2=2.0,\ x_3=2.5,\ x_4=3.0\)</li>
+      <li>Evaluate: \(f(1.5)=2.25,\ f(2)=4,\ f(2.5)=6.25,\ f(3)=9\)</li>
+      <li>Sum: \((2.25+4+6.25+9)\times 0.5 = 21.5\times 0.5 = \mathbf{10.75}\)</li>
+      <li>Exact value: \(\left[\frac{x^3}{3}\right]_1^3 = 9-\frac{1}{3} \approx 8.67\). The right sum <em>overestimates</em> here since \(f\) is increasing.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Over/Under-Estimation Rules</div>
+    <table>
+      <tr><th>Function is…</th><th>Left Sum</th><th>Right Sum</th></tr>
+      <tr><td>Increasing on \([a,b]\)</td><td>Underestimate</td><td>Overestimate</td></tr>
+      <tr><td>Decreasing on \([a,b]\)</td><td>Overestimate</td><td>Underestimate</td></tr>
+    </table>
+    <div class="warning-box">⚠️ If the function changes monotonicity, you cannot make a simple over/under claim for the whole interval.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">The Exact Integral as a Limit</div>
+    <div class="formula-box">
+      \[\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n} f(x_i^*)\,\Delta x\]
+    </div>
+    <p>As \(n\to\infty\), all three sums converge to the same value (the exact integral) for any continuous function.</p>
+  </div>
+</div>
+
+<!-- ======== SECTION 3: IMPROPER ======== -->
+<div class="section t3" id="improper">
+  <div class="topic-header">
+    <div class="topic-icon">∞</div>
+    <div>
+      <h2>Improper Integrals</h2>
+      <div class="section-ref">§7.8 · Infinite Limits or Discontinuous Integrands</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What Makes an Integral "Improper"?</div>
+    <ul>
+      <li><strong>Type 1:</strong> One or both limits of integration are \(\pm\infty\)</li>
+      <li><strong>Type 2:</strong> The integrand has a vertical asymptote (discontinuity) somewhere on \([a,b]\)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Type 1 — Infinite Limits</div>
+    <div class="formula-box">
+      \[\int_a^{\infty} f(x)\,dx = \lim_{t\to\infty}\int_a^t f(x)\,dx\]
+    </div>
+    <div class="formula-box">
+      \[\int_{-\infty}^b f(x)\,dx = \lim_{t\to-\infty}\int_t^b f(x)\,dx\]
+    </div>
+    <div class="formula-box">
+      \[\int_{-\infty}^{\infty} f(x)\,dx = \int_{-\infty}^c f\,dx + \int_c^{\infty} f\,dx\]
+    </div>
+    <div class="note-box">💡 Split \(\int_{-\infty}^{\infty}\) at any convenient \(c\) (usually 0). The integral converges only if <em>both</em> parts converge.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Type 2 — Discontinuous Integrand</div>
+    <p>If \(f\) has a discontinuity at \(x=a\):</p>
+    <div class="formula-box">
+      \[\int_a^b f(x)\,dx = \lim_{t\to a^+}\int_t^b f(x)\,dx\]
+    </div>
+    <p>If the discontinuity is at an interior point \(c \in (a,b)\):</p>
+    <div class="formula-box">
+      \[\int_a^b f(x)\,dx = \int_a^c f\,dx + \int_c^b f\,dx\]
+    </div>
+    <div class="warning-box">⚠️ Always check for hidden discontinuities! E.g. \(\int_{-1}^{1}\frac{1}{x}\,dx\) — don't just plug in endpoints; there's a discontinuity at \(x=0\).</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">The p-Integral (Must Know!)</div>
+    <div class="formula-box">
+      \[\int_1^{\infty}\frac{1}{x^p}\,dx = \begin{cases} \dfrac{1}{p-1} & \text{if } p > 1\ (\text{converges}) \\ \infty & \text{if } p \le 1\ (\text{diverges}) \end{cases}\]
+    </div>
+    <div class="formula-box">
+      \[\int_0^{1}\frac{1}{x^p}\,dx = \begin{cases} \dfrac{1}{1-p} & \text{if } p < 1\ (\text{converges}) \\ \infty & \text{if } p \ge 1\ (\text{diverges}) \end{cases}\]
+    </div>
+    <div class="note-box">💡 Notice the conditions are <em>flipped</em> for the two cases. The boundary behavior at \(\infty\) vs. at \(0\) is opposite.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Comparison Test</div>
+    <p>If \(0 \le f(x) \le g(x)\) for all \(x \ge a\):</p>
+    <ul>
+      <li>If \(\int_a^\infty g\,dx\) converges → \(\int_a^\infty f\,dx\) converges</li>
+      <li>If \(\int_a^\infty f\,dx\) diverges → \(\int_a^\infty g\,dx\) diverges</li>
+    </ul>
+    <p>Compare unknown integrals to p-integrals or exponentials.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Worked Example — \(\int_1^{\infty} e^{-x}\,dx\)</div>
+    <ol class="steps">
+      <li>Replace \(\infty\) with \(t\): \(\displaystyle\lim_{t\to\infty}\int_1^t e^{-x}\,dx\)</li>
+      <li>Integrate: \(\displaystyle\lim_{t\to\infty}\left[-e^{-x}\right]_1^t = \lim_{t\to\infty}(-e^{-t}+e^{-1})\)</li>
+      <li>Take the limit: \(= 0 + e^{-1} = \dfrac{1}{e}\)</li>
+      <li><strong>Converges</strong> to \(1/e\).</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ======== SECTION 4: RATIONAL ======== -->
+<div class="section t4" id="rational">
+  <div class="topic-header">
+    <div class="topic-icon">∫</div>
+    <div>
+      <h2>Rational Functions (Partial Fractions)</h2>
+      <div class="section-ref">§7.5 · Integration of Rational Functions</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">When to Use Partial Fractions</div>
+    <p>Use this method to integrate a rational function \(\dfrac{P(x)}{Q(x)}\) where \(\deg P < \deg Q\).</p>
+    <div class="warning-box">⚠️ If \(\deg P \ge \deg Q\), do <strong>polynomial long division first</strong>, then apply partial fractions to the remainder.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Decomposition Cases</div>
+    <table>
+      <tr><th>Factor in \(Q(x)\)</th><th>Partial Fraction Term(s)</th></tr>
+      <tr><td>Linear: \((ax+b)\)</td><td>\(\dfrac{A}{ax+b}\)</td></tr>
+      <tr><td>Repeated linear: \((ax+b)^k\)</td><td>\(\dfrac{A_1}{ax+b}+\cdots+\dfrac{A_k}{(ax+b)^k}\)</td></tr>
+      <tr><td>Irreducible quadratic: \(ax^2+bx+c\)</td><td>\(\dfrac{Ax+B}{ax^2+bx+c}\)</td></tr>
+      <tr><td>Repeated irreducible quad: \((ax^2+bx+c)^k\)</td><td>One term per power, numerator \(Ax+B\)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Step-by-Step Method</div>
+    <ol class="steps">
+      <li><strong>Check degree</strong> — if improper, do long division first</li>
+      <li><strong>Factor</strong> the denominator \(Q(x)\) completely</li>
+      <li><strong>Write</strong> the partial fraction decomposition (see table above)</li>
+      <li><strong>Multiply both sides</strong> by \(Q(x)\) to clear denominators</li>
+      <li><strong>Solve for constants</strong>: plug in convenient values of \(x\) (roots of \(Q\)) and/or match coefficients</li>
+      <li><strong>Integrate</strong> each term — typically gives \(\ln|x+a|\) or \(\arctan\)</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Worked Example — \(\int\dfrac{1}{x^2-1}\,dx\)</div>
+    <ol class="steps">
+      <li>Factor: \(x^2-1 = (x-1)(x+1)\)</li>
+      <li>Write: \(\dfrac{1}{(x-1)(x+1)} = \dfrac{A}{x-1}+\dfrac{B}{x+1}\)</li>
+      <li>Multiply by \((x-1)(x+1)\): \(1 = A(x+1)+B(x-1)\)</li>
+      <li>Plug in \(x=1\): \(1=2A \Rightarrow A=\frac{1}{2}\). Plug in \(x=-1\): \(1=-2B \Rightarrow B=-\frac{1}{2}\)</li>
+      <li>Integrate: \(\dfrac{1}{2}\int\dfrac{1}{x-1}dx - \dfrac{1}{2}\int\dfrac{1}{x+1}dx = \dfrac{1}{2}\ln|x-1|-\dfrac{1}{2}\ln|x+1|+C\)</li>
+      <li>Simplify: \(\dfrac{1}{2}\ln\!\left|\dfrac{x-1}{x+1}\right|+C\)</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Key Integration Results</div>
+    <table>
+      <tr><th>Form</th><th>Integral</th></tr>
+      <tr><td>\(\int\dfrac{1}{x+a}\,dx\)</td><td>\(\ln|x+a|+C\)</td></tr>
+      <tr><td>\(\int\dfrac{1}{(x+a)^n}\,dx\)</td><td>\(\dfrac{(x+a)^{1-n}}{1-n}+C\), \(n\ne1\)</td></tr>
+      <tr><td>\(\int\dfrac{1}{x^2+a^2}\,dx\)</td><td>\(\dfrac{1}{a}\arctan\dfrac{x}{a}+C\)</td></tr>
+      <tr><td>\(\int\dfrac{x}{x^2+a^2}\,dx\)</td><td>\(\dfrac{1}{2}\ln(x^2+a^2)+C\)</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ======== QUIZ ======== -->
+<div class="section" id="quiz">
+  <div class="topic-header">
+    <div class="topic-icon">🎯</div>
+    <div>
+      <h2>Practice Quiz</h2>
+      <div class="section-ref">Test your understanding across all 4 topics</div>
+    </div>
+  </div>
+
+  <div class="quiz-score">
+    <div>
+      <div class="score-text">SCORE</div>
+      <div class="score-val" id="scoreDisplay">0 / 0</div>
+    </div>
+    <button class="reset-btn" onclick="resetQuiz()">↺ Reset</button>
+  </div>
+
+  <div class="quiz-container" id="quizContainer"></div>
+</div>
+
+</main>
+
+<script>
+// Navigation
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Quiz data
+const questions = [
+  {
+    topic: "Trig Integration",
+    q: "What is the correct reduction formula for \\(\\int \\sin^n x\\,dx\\)?",
+    options: [
+      "\\(-\\dfrac{\\sin^{n-1}x\\cos x}{n} + \\dfrac{n-1}{n}\\int \\sin^{n-2}x\\,dx\\)",
+      "\\(-\\dfrac{\\sin^{n-1}x\\cos x}{n-1} + \\dfrac{n}{n-1}\\int \\sin^{n-2}x\\,dx\\)",
+      "\\(\\dfrac{\\cos^{n-1}x\\sin x}{n} + \\dfrac{n-1}{n}\\int \\cos^{n-2}x\\,dx\\)",
+      "\\(\\dfrac{\\sin^{n+1}x}{n+1} + C\\)"
+    ],
+    answer: 0,
+    explanation: "The reduction formula is obtained by integration by parts, factoring out one sin x and integrating. It reduces power by 2 each application."
+  },
+  {
+    topic: "Trig Integration",
+    q: "To integrate \\(\\int \\sin^3 x\\,dx\\), the best strategy is:",
+    options: [
+      "Use the reduction formula directly twice",
+      "Save one \\(\\sin x\\) factor, convert \\(\\sin^2 x = 1-\\cos^2 x\\), then let \\(u=\\cos x\\)",
+      "Use the half-angle identity \\(\\sin^2 x = \\frac{1-\\cos 2x}{2}\\) first",
+      "Write \\(\\sin^3 x = \\sin x \\cdot \\sin x \\cdot \\sin x\\) and integrate term by term"
+    ],
+    answer: 1,
+    explanation: "For odd powers of sin (or cos), save one factor for du, convert the rest using the Pythagorean identity, then u-substitute. Here: ∫sin³x dx = ∫(1−cos²x)sin x dx, let u=cos x."
+  },
+  {
+    topic: "Riemann Sum",
+    q: "For \\(f(x) = x^2\\) on \\([0,2]\\) with \\(n=4\\) rectangles, what is \\(\\Delta x\\)?",
+    options: ["0.25", "0.5", "1", "2"],
+    answer: 1,
+    explanation: "Δx = (b−a)/n = (2−0)/4 = 0.5. This is always the first step in computing a Riemann sum."
+  },
+  {
+    topic: "Riemann Sum",
+    q: "If \\(f\\) is <em>decreasing</em> on \\([a,b]\\), which statement is true?",
+    options: [
+      "Left sum underestimates, right sum overestimates",
+      "Left sum overestimates, right sum underestimates",
+      "Both left and right sums overestimate",
+      "Both left and right sums underestimate"
+    ],
+    answer: 1,
+    explanation: "When f is decreasing, the left endpoints give higher values (overestimate) and right endpoints give lower values (underestimate). The opposite applies for increasing functions."
+  },
+  {
+    topic: "Improper Integrals",
+    q: "\\(\\int_1^\\infty \\dfrac{1}{x^2}\\,dx\\) equals:",
+    options: ["Diverges to \\(\\infty\\)", "\\(\\dfrac{1}{2}\\)", "\\(1\\)", "\\(2\\)"],
+    answer: 2,
+    explanation: "This is a p-integral with p=2 > 1, so it converges. ∫₁^∞ x⁻² dx = [−x⁻¹]₁^∞ = 0−(−1) = 1."
+  },
+  {
+    topic: "Improper Integrals",
+    q: "\\(\\int_1^\\infty \\dfrac{1}{\\sqrt{x}}\\,dx\\) is:",
+    options: ["Converges to 2", "Converges to \\(\\sqrt{\\infty}\\)", "Diverges", "Converges to \\(\\frac{1}{2}\\)"],
+    answer: 2,
+    explanation: "This is a p-integral with p = 1/2 ≤ 1, so it diverges. The limit lim_{t→∞} [2√x]₁^t = lim_{t→∞} (2√t − 2) = ∞."
+  },
+  {
+    topic: "Improper Integrals",
+    q: "To evaluate \\(\\int_0^1 \\dfrac{1}{\\sqrt{x}}\\,dx\\) (Type 2), we write it as:",
+    options: [
+      "\\(\\displaystyle\\lim_{t\\to\\infty}\\int_0^t x^{-1/2}\\,dx\\)",
+      "\\(\\displaystyle\\lim_{t\\to 0^+}\\int_t^1 x^{-1/2}\\,dx\\)",
+      "\\(\\displaystyle\\lim_{t\\to 1^-}\\int_0^t x^{-1/2}\\,dx\\)",
+      "It cannot be evaluated"
+    ],
+    answer: 1,
+    explanation: "The integrand blows up at x=0 (the left endpoint), so we replace 0 with t and take the limit as t→0⁺. This converges because p=1/2 < 1."
+  },
+  {
+    topic: "Rational Functions",
+    q: "What is the first step when integrating \\(\\dfrac{x^3+2x}{x^2+1}\\)?",
+    options: [
+      "Immediately write partial fractions",
+      "Perform polynomial long division since the degree of numerator ≥ degree of denominator",
+      "Factor the denominator into linear factors",
+      "Multiply numerator and denominator by \\(x\\)"
+    ],
+    answer: 1,
+    explanation: "The numerator has degree 3, denominator degree 2. Since deg(P) ≥ deg(Q), we must do long division first: x³+2x = (x²+1)·x + x, so the integrand = x + x/(x²+1)."
+  },
+  {
+    topic: "Rational Functions",
+    q: "The partial fraction decomposition of \\(\\dfrac{1}{(x+1)(x+2)^2}\\) is:",
+    options: [
+      "\\(\\dfrac{A}{x+1}+\\dfrac{B}{x+2}\\)",
+      "\\(\\dfrac{A}{x+1}+\\dfrac{Bx+C}{(x+2)^2}\\)",
+      "\\(\\dfrac{A}{x+1}+\\dfrac{B}{x+2}+\\dfrac{C}{(x+2)^2}\\)",
+      "\\(\\dfrac{Ax+B}{x+1}+\\dfrac{C}{(x+2)^2}\\)"
+    ],
+    answer: 2,
+    explanation: "A repeated linear factor (x+2)² gets one term for each power: B/(x+2) + C/(x+2)². The single linear factor (x+1) gets A/(x+1)."
+  },
+  {
+    topic: "Rational Functions",
+    q: "\\(\\int \\dfrac{2x}{x^2+4}\\,dx = \\)",
+    options: [
+      "\\(\\arctan\\!\\left(\\dfrac{x}{2}\\right)+C\\)",
+      "\\(\\ln(x^2+4)+C\\)",
+      "\\(\\dfrac{1}{2}\\ln(x^2+4)+C\\)",
+      "\\(2\\ln|x|+C\\)"
+    ],
+    answer: 1,
+    explanation: "Let u = x²+4, du = 2x dx. The integral becomes ∫du/u = ln|u| + C = ln(x²+4)+C. (We can drop the absolute value since x²+4 > 0 always.)"
+  }
+];
+
+let score = 0, answered = 0;
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  questions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-question';
+    div.id = `q${i}`;
+    div.innerHTML = `
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:1px">${q.topic.toUpperCase()}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="opts${i}">
+        ${q.options.map((opt,j)=>`
+          <button class="option-btn" onclick="answer(${i},${j})" id="opt${i}_${j}">
+            <span class="option-label">${String.fromCharCode(65+j)}.</span>
+            <span>${opt}</span>
+          </button>`).join('')}
+      </div>
+      <div class="explanation" id="exp${i}">${q.explanation}</div>
+    `;
+    container.appendChild(div);
+  });
+  updateScore();
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
+function answer(qi, selected) {
+  const q = questions[qi];
+  const qDiv = document.getElementById(`q${qi}`);
+  if (qDiv.classList.contains('correct') || qDiv.classList.contains('wrong')) return;
+
+  for (let j=0; j<q.options.length; j++) {
+    const btn = document.getElementById(`opt${qi}_${j}`);
+    btn.disabled = true;
+    if (j === q.answer) btn.classList.add('correct');
+    if (j === selected && selected !== q.answer) btn.classList.add('wrong');
+  }
+
+  if (selected === q.answer) {
+    qDiv.classList.add('correct');
+    score++;
+  } else {
+    qDiv.classList.add('wrong');
+  }
+  answered++;
+  document.getElementById(`exp${qi}`).classList.add('show');
+  updateScore();
+  if (window.MathJax) MathJax.typesetPromise([document.getElementById(`exp${qi}`)]);
+}
+
+function updateScore() {
+  document.getElementById('scoreDisplay').textContent = `${score} / ${answered}`;
+}
+
+function resetQuiz() {
+  score = 0; answered = 0;
+  buildQuiz();
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
